@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/left">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/face" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_alignTop="@+id/profile"
+            android:layout_toRightOf="@+id/profile"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="18dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/messageTextcolor"
+            android:layout_toEndOf="@+id/profile"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="status here"
+            android:id="@+id/status"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/name"
+            android:layout_alignLeft="@+id/name"
+            android:layout_alignStart="@+id/name"
+            />
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:id="@+id/state"
+        android:layout_margin="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
+        />
+
+</RelativeLayout>
