@@ -38,4 +38,5 @@ dependencies {
     compile 'org.igniterealtime.smack:smack-im:4.1.1'
     compile 'org.jxmpp:jxmpp-core:0.4.2-beta1'
     compile 'org.jxmpp:jxmpp-util-cache:0.4.2-beta1'
+    compile 'com.jakewharton:butterknife:6.1.0'
 }

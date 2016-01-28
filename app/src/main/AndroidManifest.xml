@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/justtalk"
@@ -23,7 +23,12 @@
         <activity
             android:name=".justtalk.activity.SingleChatActivity"
             android:label="@string/title_activity_single_chat"
-            android:theme="@style/JustTalk"></activity>
+            android:theme="@style/JustTalk" />
+        <activity
+            android:name=".justtalk.activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden">
+
+        </activity>
     </application>
 
 </manifest>

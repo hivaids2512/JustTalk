@@ -1,5 +1,7 @@
 package info.tranquy.justtalk.justtalk.chat;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
@@ -40,9 +42,9 @@ public class XmppChatManager {
         activateChatList = new ArrayList<Chat>();
     }
 
-    public void setUsernameAndPassword(String username, String password){
+    public void setUsernameAndPassword(String username, String password) {
         configBuilder.setUsernameAndPassword(username, password);
-        isSetUsernameAndPassword =true;
+        isSetUsernameAndPassword = true;
     }
 
     public void newConnection(){

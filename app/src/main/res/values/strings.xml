@@ -4,10 +4,12 @@
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-
+    <string name="register_promt">No account yet? Create one</string>
     <string name="nav_item_home">Inbox</string>
     <string name="nav_item_friends">Friends</string>
     <string name="nav_item_notifications">Messages</string>
+    <string name="no_connection">No Connection. Offline Mode</string>
+    <string name="inputMessage">Enter your message</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">

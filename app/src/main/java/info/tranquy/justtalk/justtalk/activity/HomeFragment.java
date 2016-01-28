@@ -26,6 +26,7 @@ import java.util.List;
 import info.tranquy.justtalk.R;
 import info.tranquy.justtalk.justtalk.adapter.MessageListAdapter;
 import info.tranquy.justtalk.justtalk.adapter.NavigationDrawerAdapter;
+import info.tranquy.justtalk.justtalk.chat.NetworkManager;
 import info.tranquy.justtalk.justtalk.chat.XmppChatManager;
 import info.tranquy.justtalk.justtalk.decoration.DividerItemDecoration;
 import info.tranquy.justtalk.justtalk.model.MessListItem;
@@ -46,26 +47,25 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         new Connection().execute();
+        boolean isConnected = new NetworkManager().isNetworkAvailable(getActivity());
+        Toast toast = Toast.makeText(getActivity(), String.valueOf(isConnected), Toast.LENGTH_SHORT);
+        toast.show();
 
     }
 
     public void createChat() {
         chatManager = XmppChatManager.getInstance();
-
-
-
         chatManager.setUsernameAndPassword("quy1", "quy1");
         chatManager.newConnection();
         chatManager.openConnection();
         chatManager.login();
-
         chatManager.chatWith("quy2@quyvupc");
         Chat chat = chatManager.getChatInstance("quy2@quyvupc");
         chatManager.sendMessage(chat, "quyquy");
-
         chatManager.chatWith("quy3@quyvupc");
         Chat chat2 = chatManager.getChatInstance("quy3@quyvupc");
         chatManager.sendMessage(chat2, "quyquy");
+
     }
 
     public static List<MessListItem> getData() {

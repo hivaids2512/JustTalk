@@ -26,8 +26,8 @@ public class SingleChatActivity extends ActionBarActivity {
         setContentView(R.layout.activity_single_chat);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setHomeButtonEnabled(true);
         Fragment fragment = new SingleChatFragment();
 
         if (fragment != null) {
@@ -64,6 +64,11 @@ public class SingleChatActivity extends ActionBarActivity {
         if(id == R.id.action_search){
             Toast.makeText(getApplicationContext(), "Search action is selected!", Toast.LENGTH_SHORT).show();
             return true;
+        }
+
+        if(id == android.R.id.home){
+            onBackPressed();
+
         }
 
         return super.onOptionsItemSelected(item);

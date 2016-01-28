@@ -1,17 +1,39 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backround"
     tools:context="info.tranquy.justtalk.justtalk.activity.SingleChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/message_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_marginBottom="50dp"/>
+
+    <RelativeLayout
+        android:id="@+id/InnerRelativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/singleChatTextBackground"
-        android:text="@string/hello_blank_fragment"
-        android:textSize="15dp"/>
+        android:background="@color/inputChatMessageBackground"
+        android:layout_alignParentBottom="true" >
 
-</ScrollView>
+        <Button
+            android:text="Sent"
+            android:id="@+id/Button"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+
+        <EditText
+            android:id="@+id/EditText"
+            android:layout_width="fill_parent"
+            android:layout_toLeftOf="@id/Button"
+            android:hint="@string/inputMessage"
+            android:layout_height="wrap_content">
+        </EditText>
+
+    </RelativeLayout>
+
+</RelativeLayout>

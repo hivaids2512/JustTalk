@@ -1,5 +1,6 @@
 package info.tranquy.justtalk.justtalk.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         // display the first navigation drawer view on app launch
         displayView(0);
+        //Intent intent = new Intent(this, LoginActivity.class);
+        //startActivity(intent);
     }
 
 

@@ -5,7 +5,13 @@
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#FF80AB</color>
-    <color name="singleChatTextBackground">#FF80F0FF</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="singleChatTextBackground">#99CCFF</color>
     <color name="messageTextcolor">#000000</color>
+    <color name="colorControlNormal">#c5c5c5</color>
+    <color name="colorControlActivated">#FFFFFF</color>
+    <color name="colorControlHighlight">#FFFFFF</color>
+    <color name="noConnectionBackground">#555555</color>
+    <color name="singleChatTextBackgroundOther">#FFFFFF</color>
+    <color name="inputChatMessageBackground">#FFFFFF</color>
 </resources>
