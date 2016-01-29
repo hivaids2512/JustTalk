@@ -19,9 +19,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.jivesoftware.smack.chat.Chat;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.roster.RosterEntry;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import info.tranquy.justtalk.R;
 import info.tranquy.justtalk.justtalk.adapter.MessageListAdapter;
@@ -46,55 +51,76 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new Connection().execute();
-        boolean isConnected = new NetworkManager().isNetworkAvailable(getActivity());
-        Toast toast = Toast.makeText(getActivity(), String.valueOf(isConnected), Toast.LENGTH_SHORT);
-        toast.show();
-
     }
 
     public void createChat() {
         chatManager = XmppChatManager.getInstance();
         chatManager.setUsernameAndPassword("quy1", "quy1");
-        chatManager.newConnection();
-        chatManager.openConnection();
+        //chatManager.newConnection();
+        //chatManager.openConnection();
         chatManager.login();
-        chatManager.chatWith("quy2@quyvupc");
-        Chat chat = chatManager.getChatInstance("quy2@quyvupc");
+
+        Chat chat = chatManager.chatWith("quy2@quyvupc");
         chatManager.sendMessage(chat, "quyquy");
         chatManager.chatWith("quy3@quyvupc");
         Chat chat2 = chatManager.getChatInstance("quy3@quyvupc");
         chatManager.sendMessage(chat2, "quyquy");
 
+        Collection<RosterEntry> entries = chatManager.getRosterEntries();
+        Log.e("e", String.valueOf(entries.size()));
+        mapData(entries);
+
     }
 
-    public static List<MessListItem> getData() {
-        List<MessListItem> data = new ArrayList<>();
+    public List<MessListItem> mapData(Collection<RosterEntry> entries) {
+        List<MessListItem> messList = new ArrayList<>();
 
 
         // preparing navigation drawer items
-        for (int i = 0; i < 10; i++) {
+        for (RosterEntry entry : entries) {
+            MessListItem messItem = new MessListItem();
+            messItem.setProfileID(R.drawable.face);
+            messItem.setName(entry.getName().toString());
+
+            messItem.setStatus("I am ok now");
+            messItem.setStateID(R.drawable.online);
+            messList.add(messItem);
+        }
+        return messList;
+    }
+
+    public List<MessListItem>exData() {
+        List<MessListItem> messList = new ArrayList<>();
+
+
+        // preparing navigation drawer items
+        for (int i =0; i< 10; i++) {
             MessListItem messItem = new MessListItem();
             messItem.setProfileID(R.drawable.face);
             messItem.setName("Quy Vu");
+
             messItem.setStatus("I am ok now");
             messItem.setStateID(R.drawable.online);
-            data.add(messItem);
+            messList.add(messItem);
         }
-        return data;
+        return messList;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        List<MessListItem> messList = new ArrayList<MessListItem>();
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.inbox_list);
 
-        adapter = new MessageListAdapter(getActivity(), getData());
-        recyclerView.setAdapter(adapter);
+        new Connection().execute();
+
+
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new FragmentDrawer.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -174,15 +200,36 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private class Connection extends AsyncTask {
+    public class Connection extends AsyncTask<Void, Void, List<MessListItem>> {
 
         @Override
-        protected Object doInBackground(Object... arg0) {
-            createChat();
-            return null;
+        protected List<MessListItem> doInBackground(Void... params) {
+            List<MessListItem> messListItems = new ArrayList<MessListItem>();
+            chatManager = XmppChatManager.getInstance();
+            chatManager.setUsernameAndPassword("quy1", "quy1");
+            //chatManager.newConnection();
+            //chatManager.openConnection();
+            chatManager.login();
+
+            Chat chat = chatManager.chatWith("quy2@quyvupc");
+            chatManager.sendMessage(chat, "quy :v");
+
+            Collection<RosterEntry> entries = chatManager.getRosterEntries();
+
+                Log.e("e", String.valueOf(entries.size()));
+
+
+            messListItems = mapData(entries);
+            return messListItems;
         }
 
+        @Override
+        protected void onPostExecute(List<MessListItem> messListItems) {
+            adapter = new MessageListAdapter(getActivity(),messListItems);
+            recyclerView.setAdapter(adapter);
+        }
     }
+
 
 
 }

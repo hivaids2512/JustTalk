@@ -64,22 +64,40 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
 
             messageParams.addRule(RelativeLayout.LEFT_OF, R.id.profile_container);
             messageParams.addRule(RelativeLayout.ALIGN_TOP, R.id.profile_container);
-            messageParams.setMargins(10, 3, 30, 0);
+            messageParams.setMargins(20, 3, 30, 20);
             holder.message.setLayoutParams(messageParams);
 
             LayoutParams profileParams = new LayoutParams(144,
                     144);
 
             profileParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            profileParams.setMargins(0, 24,30, 24);
+            profileParams.setMargins(0, 24, 30, 24);
             profileParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            profileParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            //profileParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             holder.profile_container.setLayoutParams(profileParams);
 
-            holder.message_container.setGravity(Gravity.RIGHT);
+            //holder.message_container.setGravity(Gravity.RIGHT);
             holder.message.setBackgroundResource(R.color.singleChatTextBackground);
         }else{
-            holder.message_container.setGravity(Gravity.LEFT);
+
+            LayoutParams messageParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT);
+
+            messageParams.addRule(RelativeLayout.RIGHT_OF, R.id.profile_container);
+            messageParams.addRule(RelativeLayout.ALIGN_TOP, R.id.profile_container);
+            messageParams.setMargins(30, 3, 20, 20);
+            holder.message.setLayoutParams(messageParams);
+
+            LayoutParams profileParams = new LayoutParams(144,
+                    144);
+
+            profileParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            profileParams.setMargins(30, 24, 0, 24);
+            profileParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            //profileParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.profile_container.setLayoutParams(profileParams);
+
+            //holder.message_container.setGravity(Gravity.LEFT);
             holder.message.setBackgroundResource(R.color.singleChatTextBackgroundOther);
            // holder.message.setBackgroundResource(R.drawable.navy);
         }

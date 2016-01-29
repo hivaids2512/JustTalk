@@ -67,12 +67,17 @@ public class SingleChatFragment extends Fragment {
                 ChatMessage.setProfileID(R.drawable.face);
 
                 ChatMessage.setTime("07:29");
-                ChatMessage.setMine(true);
-                ChatMessage.setMessage("Tổng thầu, nhà sản xuất đoàn tàu đường sắt Cát Linh - Hà Đông đã tiếp thu, chỉnh sửa nhiều chi tiết ngoại thất, nội thất tàu theo góp ý của người dân và Bộ GTVT. ");
+                ChatMessage.setMine(false);
+                ChatMessage.setMessage("Tổng thầu, theo góp ý của người dân và Bộ GTVT. ");
                 messages.add(ChatMessage);
                 adapter.notifyItemInserted(messages.size() - 1);
                 recyclerView.scrollToPosition(messages.size()-1);
+                Context context = getActivity();
 
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, String.valueOf(ChatMessage.getMine()), duration);
+                toast.show();
             }
 
             @Override
@@ -94,7 +99,7 @@ public class SingleChatFragment extends Fragment {
 
 
         // preparing navigation drawer items
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < 10; i++) {
             ChatMessage ChatMessage = new ChatMessage();
             ChatMessage.setProfileID(R.drawable.face);
 
