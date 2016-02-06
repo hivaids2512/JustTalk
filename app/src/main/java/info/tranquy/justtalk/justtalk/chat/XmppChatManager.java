@@ -1,31 +1,30 @@
 package info.tranquy.justtalk.justtalk.chat;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.util.Log;
-
 import org.jivesoftware.smack.AbstractXMPPConnection;
+import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManager;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smackx.chatstates.ChatStateManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import info.tranquy.justtalk.justtalk.configuration.Configuration;
+import info.tranquy.justtalk.justtalk.network.NetworkManager;
 
 /**
  * Created by quyquy on 1/25/2016.
  */
 public class XmppChatManager {
     private static XmppChatManager ourInstance = new XmppChatManager();
-
     private XMPPTCPConnectionConfiguration.Builder configBuilder;
     private String serverIP = Configuration.serverIP;
     private int securePort = Configuration.securePort;
@@ -33,72 +32,11 @@ public class XmppChatManager {
     private int maxMessageLength = Configuration.maxMessageLength;
     private AbstractXMPPConnection connection;
     private boolean isSetUsernameAndPassword = false;
-    private ArrayList<Chat> activateChatList = null;
-    private boolean onlineMode = true;
+    //private NetworkManager networkManager;
+    //private ArrayList<Chat> activateChatList = null;
+    private boolean onlineMode;
 
-    public String getServerIP() {
-        return serverIP;
-    }
 
-    public void setServerIP(String serverIP) {
-        this.serverIP = serverIP;
-    }
-
-    public int getSecurePort() {
-        return securePort;
-    }
-
-    public void setSecurePort(int securePort) {
-        this.securePort = securePort;
-    }
-
-    public int getNonSecurePort() {
-        return nonSecurePort;
-    }
-
-    public void setNonSecurePort(int nonSecurePort) {
-        this.nonSecurePort = nonSecurePort;
-    }
-
-    public int getMaxMessageLength() {
-        return maxMessageLength;
-    }
-
-    public void setMaxMessageLength(int maxMessageLength) {
-        this.maxMessageLength = maxMessageLength;
-    }
-
-    public AbstractXMPPConnection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(AbstractXMPPConnection connection) {
-        this.connection = connection;
-    }
-
-    public boolean isSetUsernameAndPassword() {
-        return isSetUsernameAndPassword;
-    }
-
-    public void setIsSetUsernameAndPassword(boolean isSetUsernameAndPassword) {
-        this.isSetUsernameAndPassword = isSetUsernameAndPassword;
-    }
-
-    public XMPPTCPConnectionConfiguration.Builder getConfigBuilder() {
-        return configBuilder;
-    }
-
-    public void setConfigBuilder(XMPPTCPConnectionConfiguration.Builder configBuilder) {
-        this.configBuilder = configBuilder;
-    }
-
-    public boolean isOnlineMode() {
-        return onlineMode;
-    }
-
-    public void setOnlineMode(boolean onlineMode) {
-        this.onlineMode = onlineMode;
-    }
 
     private XmppChatManager() {
         configBuilder = XMPPTCPConnectionConfiguration.builder();
@@ -107,7 +45,7 @@ public class XmppChatManager {
         configBuilder.setHost(serverIP);
         configBuilder.setPort(nonSecurePort);
         configBuilder.setDebuggerEnabled(true);
-        activateChatList = new ArrayList<Chat>();
+        onlineMode = true;
     }
 
     public void setUsernameAndPassword(String username, String password) {
@@ -115,71 +53,77 @@ public class XmppChatManager {
         isSetUsernameAndPassword = true;
     }
 
-    public void newConnection(){
+    private boolean newConnection(){
         connection = new XMPPTCPConnection(configBuilder.build());
+        connection.addConnectionListener(new XMPPConnectionListener());
+        ReconnectionManager manager = ReconnectionManager.getInstanceFor(connection);
+        manager.enableAutomaticReconnection();
+        manager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
+        return true;
     }
 
-    public void openConnection(){
-        try {
-            connection.connect();
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XMPPException e) {
-            e.printStackTrace();
+    public boolean openConnection(){
+        if(onlineMode) {
+            try {
+                connection.connect();
+                return true;
+            } catch (SmackException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } catch (XMPPException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
+        return false;
     }
 
-    public void closeConnection (){
-        if(connection.isConnected()){
-            connection.disconnect();
+    public boolean login(){
+        if(onlineMode && isSetUsernameAndPassword) {
+            try {
+                if(newConnection() && openConnection()){
+                    connection.login();
+                    return true;
+                }
+
+            } catch (XMPPException e) {
+                e.printStackTrace();
+                return false;
+            } catch (SmackException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
-    }
-
-    public void login(){
-
-        try {
-            newConnection();
-            openConnection();
-            connection.login();
-        } catch (XMPPException e) {
-            e.printStackTrace();
-        } catch (SmackException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        return false;
     }
 
     public void logout(){
-        if(connection.isConnected()){
-            closeConnection();
+        if(connection.isConnected() && onlineMode){
+            connection.disconnect();
+            onlineMode = false;
         }
     }
 
+    public boolean isConnected(){
+        return connection.isConnected();
+    }
+
+    /*
     public Chat chatWith(String username){
         Chat chat = null;
         if(connection.isConnected()) {
             chat = ChatManager.getInstanceFor(connection).createChat(username);
             if(getChatInstance(username)==null){
-                activateChatList.add(chat);
+                //activateChatList.add(chat);
             }
         }
         return chat;
-    }
-
-    public ArrayList<Chat> getActivateChatList(){
-        return this.activateChatList;
-    }
-
-    public int getActivateChatListSize(){
-        return this.activateChatList.size();
-    }
-
-    public boolean getConnectionState(){
-        return connection.isConnected();
     }
 
     public Chat getChatInstance(String participant){
@@ -199,7 +143,7 @@ public class XmppChatManager {
         if(message.length() < maxMessageLength){
             try {
                 chat.sendMessage(message);
-                chat.getParticipant();
+                //chat.getParticipant();
             } catch (SmackException.NotConnectedException e) {
                 e.printStackTrace();
             }
@@ -213,8 +157,78 @@ public class XmppChatManager {
         return entries;
     }
 
+    public Presence getPresence(String user){
+        Roster roster = Roster.getInstanceFor(connection);
+        return roster.getPresence(user);
+    }*/
+
+
+
     public static XmppChatManager getInstance() {
         return ourInstance;
     }
 
+    public XMPPTCPConnectionConfiguration.Builder getConfigBuilder() {
+        return configBuilder;
+    }
+
+    public void setConfigBuilder(XMPPTCPConnectionConfiguration.Builder configBuilder) {
+        this.configBuilder = configBuilder;
+    }
+
+    public String getServerIP() {
+        return serverIP;
+    }
+
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
+    }
+
+    public int getNonSecurePort() {
+        return nonSecurePort;
+    }
+
+    public void setNonSecurePort(int nonSecurePort) {
+        this.nonSecurePort = nonSecurePort;
+    }
+
+    public int getSecurePort() {
+        return securePort;
+    }
+
+    public void setSecurePort(int securePort) {
+        this.securePort = securePort;
+    }
+
+    public int getMaxMessageLength() {
+        return maxMessageLength;
+    }
+
+    public void setMaxMessageLength(int maxMessageLength) {
+        this.maxMessageLength = maxMessageLength;
+    }
+
+    public boolean isSetUsernameAndPassword() {
+        return isSetUsernameAndPassword;
+    }
+
+    public void setIsSetUsernameAndPassword(boolean isSetUsernameAndPassword) {
+        this.isSetUsernameAndPassword = isSetUsernameAndPassword;
+    }
+
+    public boolean isOnlineMode() {
+        return onlineMode;
+    }
+
+    public void setOnlineMode(boolean onlineMode) {
+        this.onlineMode = onlineMode;
+    }
+
+    public AbstractXMPPConnection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(AbstractXMPPConnection connection) {
+        this.connection = connection;
+    }
 }

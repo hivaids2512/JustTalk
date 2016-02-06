@@ -29,6 +29,8 @@
         <EditText
             android:id="@+id/EditText"
             android:layout_width="fill_parent"
+            android:lines="2"
+            android:scrollHorizontally="true"
             android:layout_toLeftOf="@id/Button"
             android:hint="@string/inputMessage"
             android:layout_height="wrap_content">

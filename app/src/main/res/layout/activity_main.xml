@@ -29,7 +29,8 @@
                 android:gravity="center"
                 android:background="@color/noConnectionBackground"
                 android:textColor="@color/textColorPrimary"
-                android:text="@string/no_connection"/>
+                android:text="@string/no_connection"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <FrameLayout

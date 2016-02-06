@@ -11,23 +11,29 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/JustTalk">
+        <receiver android:name=".justtalk.network.NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".justtalk.activity.MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".justtalk.activity.SingleChatActivity"
             android:label="@string/title_activity_single_chat"
+            android:noHistory="true"
             android:theme="@style/JustTalk" />
         <activity
             android:name=".justtalk.activity.LoginActivity"
             android:windowSoftInputMode="stateHidden">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -28,18 +28,20 @@ public class SingleChatActivity extends ActionBarActivity {
         setSupportActionBar(mToolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setHomeButtonEnabled(true);
+
         Fragment fragment = new SingleChatFragment();
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
+            //fragmentTransaction.addToBackStack("A_B_TAG");
             fragmentTransaction.commit();
-
+            String Name = getIntent().getStringExtra("Name");
             // set the toolbar title
-            getSupportActionBar().setTitle("Chattt");
+            getSupportActionBar().setTitle(Name);
+            getSupportActionBar().setSubtitle("Online");
         }
-
     }
 
     @Override
@@ -67,11 +69,19 @@ public class SingleChatActivity extends ActionBarActivity {
         }
 
         if(id == android.R.id.home){
-            onBackPressed();
-
+            getSupportFragmentManager().popBackStack("A_B_TAG",
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            finish();
+            //onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
+    }
 }

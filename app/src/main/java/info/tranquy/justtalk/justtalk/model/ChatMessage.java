@@ -10,6 +10,7 @@ public class ChatMessage {
     private String time;
     private boolean mine;
 
+
     public int getProfileID() {
         return profileID;
     }

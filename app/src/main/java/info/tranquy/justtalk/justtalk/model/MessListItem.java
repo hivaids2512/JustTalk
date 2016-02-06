@@ -10,6 +10,16 @@ public class MessListItem {
     private String status;
     private int stateID;
 
+    private String user;
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public MessListItem(){
 
     }

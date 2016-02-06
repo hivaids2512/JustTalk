@@ -10,6 +10,8 @@
     <string name="nav_item_notifications">Messages</string>
     <string name="no_connection">No Connection. Offline Mode</string>
     <string name="inputMessage">Enter your message</string>
+    <string name="securityLogin">securityLogin</string>
+    <string name="noMessageAlert">Enter message to send</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
